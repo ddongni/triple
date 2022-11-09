@@ -2,13 +2,17 @@ package dongeun.trip.entity;
 
 import dongeun.city.entity.City;
 import dongeun.common.util.TimeStamp;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Entity
 @Table(name = "trip")
