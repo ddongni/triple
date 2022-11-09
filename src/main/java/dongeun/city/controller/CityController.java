@@ -6,6 +6,8 @@ import dongeun.city.service.CityService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 public class CityController {
 
@@ -16,7 +18,7 @@ public class CityController {
     }
 
     @PostMapping("/cities")
-    public ResponseEntity<CityDto> saveCity(@RequestBody CityDto cityDto) {
+    public ResponseEntity<CityDto> saveCity(@RequestBody @Valid CityDto cityDto) {
         City city = cityService.saveCity(cityDto);
         CityDto responseCityDto = city.mapCityEntityToCityDto();
         return ResponseEntity.ok()
@@ -24,7 +26,7 @@ public class CityController {
     }
 
     @PutMapping("/cities")
-    public ResponseEntity<CityDto> updateCity(@RequestBody CityDto cityDto) {
+    public ResponseEntity<CityDto> updateCity(@RequestBody @Valid CityDto cityDto) {
         City city = cityService.updateCity(cityDto);
         CityDto responseCityDto = city.mapCityEntityToCityDto();
         return ResponseEntity.ok()

@@ -1,7 +1,7 @@
 package dongeun.city.entity;
 
 import dongeun.city.dto.CityDto;
-import dongeun.common.util.TimeStamp;
+import dongeun.common.entity.TimeStamp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

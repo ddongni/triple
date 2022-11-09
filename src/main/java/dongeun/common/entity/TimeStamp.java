@@ -1,4 +1,4 @@
-package dongeun.common.util;
+package dongeun.common.entity;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
