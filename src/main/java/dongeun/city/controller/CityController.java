@@ -3,6 +3,7 @@ package dongeun.city.controller;
 import dongeun.city.dto.CityDto;
 import dongeun.city.entity.City;
 import dongeun.city.service.CityService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,5 +32,11 @@ public class CityController {
         CityDto responseCityDto = city.mapCityEntityToCityDto();
         return ResponseEntity.ok()
                 .body(responseCityDto);
+    }
+
+    @DeleteMapping("/cities")
+    public ResponseEntity deleteCity(@RequestParam(required = true) String cityName) {
+        cityService.deleteCity(cityName);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

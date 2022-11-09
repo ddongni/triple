@@ -7,13 +7,13 @@ public class ErrorResponse {
 
     private int code;
 
-    private String message;
-
     private ErrorCode status;
 
+    private String message;
+
     public ErrorResponse(BaseException e) {
-        this.code = e.getErrorCode().getCode();
+        this.code = e.errorCode.getErrorCode();
+        this.status = e.errorCode;
         this.message = e.getMessage();
-        this.status = e.getErrorCode();
     }
 }

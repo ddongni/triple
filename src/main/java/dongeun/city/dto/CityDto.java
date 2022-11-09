@@ -12,15 +12,15 @@ public class CityDto {
     @NotNull
     private String name;
 
-    private String description;
-
     private String country;
+
+    private String description;
 
     public City mapCityDtoToCityEntity() {
         return City.builder()
                 .name(name)
-                .description(description)
                 .country(country)
+                .description(description)
                 .build();
     }
 }

@@ -3,6 +3,7 @@ package dongeun.common.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -15,7 +16,7 @@ public class ControllerAdvice {
     public ResponseEntity<ErrorResponse> handleBaseException(BaseException e) {
         log.error("handleBaseException : {}", e);
         return ResponseEntity
-                .status(e.getErrorCode().getCode())
+                .status(e.errorCode.getErrorCode())
                 .body(new ErrorResponse(e));
     }
 
@@ -25,7 +26,17 @@ public class ControllerAdvice {
         log.error("handleMethodArgumentNotValidException : {}", e);
         BaseException baseException = new BaseException(ErrorCode.INVALID_METHOD_ARGUMENT, "파라미터 값을 다시 확인해주세요.");
         return ResponseEntity
-                .status(baseException.getErrorCode().getCode())
+                .status(baseException.errorCode.getErrorCode())
+                .body(new ErrorResponse(baseException));
+    }
+
+    // Required Request Parameter 에러
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
+        log.error("handleMissingServletRequestParameterException : {}", e);
+        BaseException baseException = new BaseException(ErrorCode.INVALID_REQUIRED_PARAMETER, "필수 파라미터 값을 다시 확인해주세요.");
+        return ResponseEntity
+                .status(baseException.errorCode.getErrorCode())
                 .body(new ErrorResponse(baseException));
     }
 }
