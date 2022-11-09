@@ -1,6 +1,7 @@
 package dongeun.trip.entity;
 
 import dongeun.city.entity.City;
+import dongeun.common.util.TimeStamp;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,7 +12,7 @@ import java.time.LocalDate;
 @Builder
 @Entity
 @Table(name = "trip")
-public class Trip {
+public class Trip extends TimeStamp {
 
     @Id
     @GeneratedValue
@@ -31,4 +32,5 @@ public class Trip {
     private String transportation;
 
     private String managerName;
+
 }
