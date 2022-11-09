@@ -1,0 +1,30 @@
+spring:
+  # H2 인메모리 DB 설정
+  datasource:
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ''
+    url: jdbc:h2:~/triple
+    # Hikari Connection Pool
+    hikari:
+      connection-timeout: 30000 # 클라이언트가 pool에 connection을 요청하는데 기다리는 최대시간 (default 30000(30초))
+      maximum-poolSize: 10 # 유휴 및 사용중인 connection을 포함하여 풀에 보관가능한 최대 커넥션 개수 (default 10)
+      max-lifetime: 1800000 # connection의 최대 유지 시간 (default : 1800000 (30분))
+      pool-name: HikariCP # pool 이름
+      connection-test-query: SELECT 1 # 데이터베이스 연결이 여전히 활성화되어있는지 확인하기 위해 pool에서 connection을 제공하기 전에 실행되는 쿼리
+
+  # H2 console 활성화 및 경로 설정
+  h2:
+    console:
+      path: /h2-console
+      enabled: true
+
+  # Hibernate 설정
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+        show_sql: true
