@@ -9,8 +9,10 @@ import dongeun.trip.entity.Trip;
 import dongeun.trip.exception.TripException;
 import dongeun.trip.repository.TripRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+import java.util.List;
+
 
 @Service
 public class TripService {
@@ -55,4 +57,17 @@ public class TripService {
         tripRepository.deleteById(tripId);
     }
 
+    @Transactional(readOnly = true)
+    public Trip getTrip(Long tripId) {
+        return tripRepository.findById(tripId)
+                .orElseThrow(() -> new TripException(ErrorCode.NOT_FOUND_DATA, "해당 여행 정보를 찾을 수 없습니다. trip id : " + tripId));
+    }
+
+    @Transactional(readOnly = true)
+    public List<Trip> getTrips() {
+        List<Trip> trips = tripRepository.findAll();
+        if(trips == null || trips.size() == 0)
+            throw new TripException(ErrorCode.NOT_FOUND_DATA, "여행 정보를 찾을 수 없습니다.");
+        return trips;
+    }
 }

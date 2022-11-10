@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class TripController {
@@ -18,6 +20,23 @@ public class TripController {
 
     public TripController(TripService tripService) {
         this.tripService = tripService;
+    }
+
+    @GetMapping("/trips/{tripId}")
+    public TripDto getTrip(@PathVariable Long tripId) {
+        Trip trip = tripService.getTrip(tripId);
+        return trip.mapTripEntityToTripDto();
+    }
+
+    @GetMapping("/trips")
+    public List<TripDto> getTrips() {
+        List<Trip> trips = tripService.getTrips();
+
+        List<TripDto> tripsDto = new ArrayList<>();
+        trips.stream().forEach((trip) -> {
+            tripsDto.add(trip.mapTripEntityToTripDto());
+        });
+        return tripsDto;
     }
 
     @PostMapping("/trips")
