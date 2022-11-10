@@ -32,9 +32,8 @@ public class CityService {
 
     @Transactional
     public City updateCity(CityDto cityDto) {
-        City city = cityRepository.findByName(cityDto.getName());
-        if(city == null)
-            throw new CityException(ErrorCode.NOT_FOUND_DATA, "해당 도시 정보를 찾을 수 없습니다.");
+        City city = cityRepository.findByName(cityDto.getName())
+                .orElseThrow(() -> new CityException(ErrorCode.NOT_FOUND_DATA, "해당 도시 정보를 찾을 수 없습니다. city name : " + cityDto.getName()));
         city.setName(cityDto.getName());
         city.setDescription(cityDto.getDescription());
         city.setCountry(cityDto.getCountry());
@@ -43,9 +42,8 @@ public class CityService {
 
     @Transactional
     public void deleteCity(String cityName) {
-        City city = cityRepository.findByName(cityName);
-        if(city == null)
-            throw new CityException(ErrorCode.NOT_FOUND_DATA, "해당 도시 정보를 찾을 수 없습니다.");
+        City city = cityRepository.findByName(cityName)
+                .orElseThrow(() -> new CityException(ErrorCode.NOT_FOUND_DATA, "해당 도시 정보를 찾을 수 없습니다. city name : " + cityName));
         List<Trip> trips = tripRepository.findAllByCityId(city.getId());
         if(!trips.isEmpty() && trips.size() > 0)
             throw new CityException(ErrorCode.DATABASE_ERROR, "해당 도시로 지정된 여행 건이 있습니다.");
@@ -54,9 +52,8 @@ public class CityService {
 
     @Transactional(readOnly = true)
     public City getCity(String cityName) {
-        City city = cityRepository.findByName(cityName);
-        if(city == null)
-            throw new CityException(ErrorCode.NOT_FOUND_DATA, "해당 도시 정보를 찾을 수 없습니다.");
+        City city = cityRepository.findByName(cityName)
+                .orElseThrow(() -> new CityException(ErrorCode.NOT_FOUND_DATA, "해당 도시 정보를 찾을 수 없습니다. city name : " + cityName));
         return city;
     }
 

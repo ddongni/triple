@@ -5,14 +5,18 @@ import dongeun.trip.entity.Trip;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data
 @Builder
 public class TripDto {
 
+    private Long id;
+
     private String description;
 
+    @NotNull
     private String cityName;
 
     private LocalDate startDate;
