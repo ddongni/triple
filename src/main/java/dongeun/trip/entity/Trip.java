@@ -2,6 +2,7 @@ package dongeun.trip.entity;
 
 import dongeun.city.entity.City;
 import dongeun.common.entity.TimeStamp;
+import dongeun.trip.dto.TripDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -35,4 +36,14 @@ public class Trip extends TimeStamp {
 
     private String managerName;
 
+    public TripDto mapTripEntityToTripDto() {
+        return TripDto.builder()
+                .description(description)
+                .cityName(city.getName())
+                .startDate(startDate)
+                .endDate(endDate)
+                .transportation(transportation)
+                .managerName(managerName)
+                .build();
+    }
 }
