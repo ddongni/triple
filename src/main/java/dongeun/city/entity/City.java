@@ -2,14 +2,12 @@ package dongeun.city.entity;
 
 import dongeun.city.dto.CityDto;
 import dongeun.common.entity.TimeStamp;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Data
+@EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

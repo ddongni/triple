@@ -8,8 +8,8 @@ import dongeun.common.exception.ErrorCode;
 import dongeun.trip.entity.Trip;
 import dongeun.trip.repository.TripRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -34,7 +34,7 @@ public class CityService {
     public City updateCity(CityDto cityDto) {
         City city = cityRepository.findByName(cityDto.getName());
         if(city == null)
-            throw new CityException(ErrorCode.NOT_FOUND_DATA, "도시 정보를 찾을 수 없습니다.");
+            throw new CityException(ErrorCode.NOT_FOUND_DATA, "해당 도시 정보를 찾을 수 없습니다.");
         city.setName(cityDto.getName());
         city.setDescription(cityDto.getDescription());
         city.setCountry(cityDto.getCountry());
@@ -45,10 +45,27 @@ public class CityService {
     public void deleteCity(String cityName) {
         City city = cityRepository.findByName(cityName);
         if(city == null)
-            throw new CityException(ErrorCode.NOT_FOUND_DATA, "도시 정보를 찾을 수 없습니다.");
+            throw new CityException(ErrorCode.NOT_FOUND_DATA, "해당 도시 정보를 찾을 수 없습니다.");
         List<Trip> trips = tripRepository.findAllByCityId(city.getId());
         if(!trips.isEmpty() && trips.size() > 0)
             throw new CityException(ErrorCode.DATABASE_ERROR, "해당 도시로 지정된 여행 건이 있습니다.");
         cityRepository.delete(city);
     }
+
+    @Transactional(readOnly = true)
+    public City getCity(String cityName) {
+        City city = cityRepository.findByName(cityName);
+        if(city == null)
+            throw new CityException(ErrorCode.NOT_FOUND_DATA, "해당 도시 정보를 찾을 수 없습니다.");
+        return city;
+    }
+
+    @Transactional(readOnly = true)
+    public List<City> getCities() {
+        List<City> cities = cityRepository.findAll();
+        if(cities == null || cities.size() == 0)
+            throw new CityException(ErrorCode.NOT_FOUND_DATA, "도시 정보를 찾을 수 없습니다.");
+        return cities;
+    }
+
 }

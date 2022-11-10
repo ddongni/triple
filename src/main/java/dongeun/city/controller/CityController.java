@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class CityController {
@@ -16,6 +18,23 @@ public class CityController {
 
     public CityController(CityService cityService) {
         this.cityService = cityService;
+    }
+
+    @GetMapping("/cities/{cityName}")
+    public CityDto getCity(@PathVariable String cityName) {
+        City city = cityService.getCity(cityName);
+        return city.mapCityEntityToCityDto();
+    }
+
+    @GetMapping("/cities")
+    public List<CityDto> getCities() {
+        List<City> cities = cityService.getCities();
+
+        List<CityDto> citiesDto = new ArrayList<>();
+        cities.stream().forEach((city) -> {
+            citiesDto.add(city.mapCityEntityToCityDto());
+        });
+        return citiesDto;
     }
 
     @PostMapping("/cities")
