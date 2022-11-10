@@ -5,11 +5,9 @@ import dongeun.trip.dto.TripDto;
 import dongeun.trip.entity.Trip;
 import dongeun.trip.exception.TripException;
 import dongeun.trip.service.TripService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -39,5 +37,11 @@ public class TripController {
         TripDto updatedTripDto = trip.mapTripEntityToTripDto();
         return ResponseEntity.ok()
                 .body(updatedTripDto);
+    }
+
+    @DeleteMapping("/trips")
+    public ResponseEntity deleteTrip(@RequestParam(required = true) Long tripId) {
+        tripService.deleteTrip(tripId);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
