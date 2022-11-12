@@ -48,7 +48,7 @@ public class TripService {
         trip.setStartDate(tripDto.getStartDate());
         trip.setEndDate(tripDto.getEndDate());
         trip.setTransportation(tripDto.getTransportation());
-        trip.setManagerName(tripDto.getManagerName());
+        trip.setUserName(tripDto.getUserName());
         return tripRepository.save(trip);
     }
 

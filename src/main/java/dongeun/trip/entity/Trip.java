@@ -34,7 +34,7 @@ public class Trip extends TimeStamp {
 
     private String transportation;
 
-    private String managerName;
+    private String userName;
 
     public TripDto mapTripEntityToTripDto() {
         return TripDto.builder()
@@ -44,7 +44,7 @@ public class Trip extends TimeStamp {
                 .startDate(startDate)
                 .endDate(endDate)
                 .transportation(transportation)
-                .managerName(managerName)
+                .userName(userName)
                 .build();
     }
 }

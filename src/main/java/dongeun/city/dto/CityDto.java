@@ -16,11 +16,14 @@ public class CityDto {
 
     private String description;
 
+    private long views;
+
     public City mapCityDtoToCityEntity() {
         return City.builder()
                 .name(name)
                 .country(country)
                 .description(description)
+                .views(views)
                 .build();
     }
 }

@@ -26,11 +26,14 @@ public class City extends TimeStamp {
 
     private String country;
 
+    private long views;
+
     public CityDto mapCityEntityToCityDto() {
         return CityDto.builder()
                 .name(name)
                 .description(description)
                 .country(country)
+                .views(views)
                 .build();
     }
 }

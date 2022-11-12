@@ -25,7 +25,7 @@ public class TripDto {
 
     private String transportation;
 
-    private String managerName;
+    private String userName;
 
     public Trip mapTripDtoToTripEntity(City city) {
         return Trip.builder()
@@ -34,7 +34,7 @@ public class TripDto {
                 .startDate(startDate)
                 .endDate(endDate)
                 .transportation(transportation)
-                .managerName(managerName)
+                .userName(userName)
                 .build();
     }
 }
