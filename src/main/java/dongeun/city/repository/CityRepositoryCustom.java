@@ -17,5 +17,5 @@ public interface CityRepositoryCustom {
     List<City> getRegisteredCitiesWithinOneDay(LocalDateTime now);
 
     // 최근 일주일 이내에 한 번이상 조회된 도시 조회
-    List<City> getViewedCitiesAtLeastOnce(LocalDateTime now);
+    List<City> getViewedCitiesWithinLastWeek(LocalDateTime now);
 }

@@ -24,9 +24,11 @@ public class CityRepositoryImpl implements CityRepositoryCustom {
     public List<City> getCitiesOnTrip(LocalDateTime now, String userName) {
         return queryFactory
                 .selectFrom(city)
-                .innerJoin(city, trip.city)
+                .innerJoin(trip)
+                .on(city.id.eq(trip.city.id))
                 .where(equalTripUserName(userName),
                         isNowDateBetweenTripStartAndEndDate(now))
+                .orderBy(trip.startDate.asc())
                 .fetch();
     }
 
@@ -35,9 +37,12 @@ public class CityRepositoryImpl implements CityRepositoryCustom {
     public List<City> getCitiesOnPlanning(LocalDateTime now, String userName) {
         return queryFactory
                 .selectFrom(city)
-                .innerJoin(city, trip.city)
+                .innerJoin(trip)
+                .on(city.id.eq(trip.city.id))
                 .where(equalTripUserName(userName),
                         isTripStartDateAfterNowDate(now))
+                .orderBy(trip.startDate.asc())
+                .limit(10)
                 .fetch();
     }
 
@@ -46,19 +51,27 @@ public class CityRepositoryImpl implements CityRepositoryCustom {
     public List<City> getRegisteredCitiesWithinOneDay(LocalDateTime now) {
         return queryFactory
                 .selectFrom(city)
+                .innerJoin(trip)
+                .on(city.id.eq(trip.city.id))
                 .where(isTripCityNull(),
                         isRegisteredCityWithinOneDay(now))
+                .orderBy(city.createdAt.asc())
+                .limit(10)
                 .fetch();
     }
 
     // 최근 일주일 이내에 한 번이상 조회된 도시 조회
     @Override
-    public List<City> getViewedCitiesAtLeastOnce(LocalDateTime now) {
+    public List<City> getViewedCitiesWithinLastWeek(LocalDateTime now) {
         return queryFactory
                 .selectFrom(city)
+                .innerJoin(trip)
+                .on(city.id.eq(trip.city.id))
                 .where(isTripCityNull(),
                         isNotRegisteredCityWithinOneDay(now),
-                        isViewedCityAtLeastOnce())
+                        isViewedCityWithinLastWeek(now))
+                .orderBy(city.modifiedAt.asc())
+                .limit(10)
                 .fetch();
     }
 
@@ -88,8 +101,7 @@ public class CityRepositoryImpl implements CityRepositoryCustom {
         return city.createdAt.notBetween(now.minusDays(1), now);
     }
 
-    private BooleanExpression isViewedCityAtLeastOnce() {
-        return city.views.goe(1);
+    private BooleanExpression isViewedCityWithinLastWeek(LocalDateTime now) {
+        return city.modifiedAt.between(now.minusWeeks(1), now);
     }
-
 }

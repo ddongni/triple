@@ -10,6 +10,8 @@ import dongeun.trip.repository.TripRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -50,19 +52,66 @@ public class CityService {
         cityRepository.delete(city);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public City getCity(String cityName) {
         City city = cityRepository.findByName(cityName)
                 .orElseThrow(() -> new CityException(ErrorCode.NOT_FOUND_DATA, "해당 도시 정보를 찾을 수 없습니다. city name : " + cityName));
+        city.setLastViewedAt(LocalDateTime.now());
+        cityRepository.save(city);
         return city;
     }
 
     @Transactional(readOnly = true)
-    public List<City> getCities() {
-        List<City> cities = cityRepository.findAll();
-        if(cities == null || cities.size() == 0)
-            throw new CityException(ErrorCode.NOT_FOUND_DATA, "도시 정보를 찾을 수 없습니다.");
+    public List<City> getCities(String userName) {
+        LocalDateTime now = LocalDateTime.now();
+        List<City> cities = new ArrayList<>();
+        cities.addAll(getCitiesOnTrip(now, userName));
+        cities.addAll(getOtherCities(now, userName));
         return cities;
     }
 
+    public List<City> getCitiesOnTrip(LocalDateTime now, String userName) {
+        List<City> citiesOnTrip = cityRepository.getCitiesOnTrip(now, userName);
+        checkCityListNull(citiesOnTrip);
+        return citiesOnTrip;
+    }
+
+    public List<City> getOtherCities(LocalDateTime now, String userName) {
+        List<City> otherCities = new ArrayList<>();
+
+        int listSize = 0;
+        List<City> citiesOnPlanning = cityRepository.getCitiesOnPlanning(now, userName);
+        checkCityListNull(citiesOnPlanning);
+        for(City city : citiesOnPlanning) {
+            otherCities.add(city);
+            listSize++;
+            if(listSize == 10)
+                return otherCities;
+        }
+
+        List<City> registeredCitiesWithinOneDay = cityRepository.getRegisteredCitiesWithinOneDay(now);
+        checkCityListNull(registeredCitiesWithinOneDay);
+        for(City city : registeredCitiesWithinOneDay) {
+            otherCities.add(city);
+            listSize++;
+            if(listSize == 10)
+                return otherCities;
+        }
+
+        List<City> viewedCitiesAtLeastOnce = cityRepository.getViewedCitiesWithinLastWeek(now);
+        checkCityListNull(viewedCitiesAtLeastOnce);
+        for(City city : citiesOnPlanning) {
+            otherCities.add(city);
+            listSize++;
+            if(listSize == 10)
+                return otherCities;
+        }
+
+        return otherCities;
+    }
+
+    public void checkCityListNull(List<City> cities) {
+        if(cities == null)
+            throw new CityException(ErrorCode.NOT_FOUND_DATA, "도시 정보를 찾을 수 없습니다.");
+    }
 }

@@ -27,8 +27,8 @@ public class CityController {
     }
 
     @GetMapping("/cities")
-    public List<CityDto> getCities() {
-        List<City> cities = cityService.getCities();
+    public List<CityDto> getCities(@RequestParam String userName) {
+        List<City> cities = cityService.getCities(userName);
 
         List<CityDto> citiesDto = new ArrayList<>();
         cities.stream().forEach((city) -> {
@@ -54,7 +54,7 @@ public class CityController {
     }
 
     @DeleteMapping("/cities")
-    public ResponseEntity deleteCity(@RequestParam(required = true) String cityName) {
+    public ResponseEntity deleteCity(@RequestParam String cityName) {
         cityService.deleteCity(cityName);
         return new ResponseEntity(HttpStatus.OK);
     }

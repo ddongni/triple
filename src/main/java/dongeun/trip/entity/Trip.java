@@ -28,12 +28,15 @@ public class Trip extends TimeStamp {
     @JoinColumn(name = "city_id")
     private City city;
 
+    @Column(name = "start_date")
     private LocalDate startDate;
 
+    @Column(name = "end_date")
     private LocalDate endDate;
 
     private String transportation;
 
+    @Column(name = "user_name")
     private String userName;
 
     public TripDto mapTripEntityToTripDto() {

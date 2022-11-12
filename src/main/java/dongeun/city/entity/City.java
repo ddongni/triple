@@ -5,6 +5,7 @@ import dongeun.common.entity.TimeStamp;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
@@ -26,14 +27,14 @@ public class City extends TimeStamp {
 
     private String country;
 
-    private long views;
+    @Column(name = "last_viewed_at")
+    private LocalDateTime lastViewedAt;
 
     public CityDto mapCityEntityToCityDto() {
         return CityDto.builder()
                 .name(name)
                 .description(description)
                 .country(country)
-                .views(views)
                 .build();
     }
 }
