@@ -59,7 +59,7 @@ public class TripController {
     }
 
     @DeleteMapping("/trips")
-    public ResponseEntity deleteTrip(@RequestParam(required = true) Long tripId) {
+    public ResponseEntity deleteTrip(@RequestParam Long tripId) {
         tripService.deleteTrip(tripId);
         return new ResponseEntity(HttpStatus.OK);
     }

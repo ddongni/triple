@@ -1,7 +1,6 @@
 package dongeun.trip.service;
 
 import dongeun.city.entity.City;
-import dongeun.city.exception.CityException;
 import dongeun.city.repository.CityRepository;
 import dongeun.common.exception.ErrorCode;
 import dongeun.trip.dto.TripDto;

@@ -51,9 +51,9 @@ public class CityRepositoryImpl implements CityRepositoryCustom {
     public List<City> getRegisteredCitiesWithinOneDay(LocalDateTime now) {
         return queryFactory
                 .selectFrom(city)
-                .innerJoin(trip)
+                .leftJoin(trip)
                 .on(city.id.eq(trip.city.id))
-                .where(isTripCityNull(),
+                .where(isTripCityIdNull(),
                         isRegisteredCityWithinOneDay(now))
                 .orderBy(city.createdAt.asc())
                 .limit(10)
@@ -65,9 +65,9 @@ public class CityRepositoryImpl implements CityRepositoryCustom {
     public List<City> getViewedCitiesWithinLastWeek(LocalDateTime now) {
         return queryFactory
                 .selectFrom(city)
-                .innerJoin(trip)
+                .join(trip)
                 .on(city.id.eq(trip.city.id))
-                .where(isTripCityNull(),
+                .where(isTripCityIdNull(),
                         isNotRegisteredCityWithinOneDay(now),
                         isViewedCityWithinLastWeek(now))
                 .orderBy(city.modifiedAt.asc())
@@ -75,6 +75,19 @@ public class CityRepositoryImpl implements CityRepositoryCustom {
                 .fetch();
     }
 
+    // 위의 조건에 해당하지 않는 모든 도시
+    @Override
+    public List<City> getOtherRandomCities(LocalDateTime now) {
+        return queryFactory
+                .selectFrom(city)
+                .join(trip)
+                .on(city.id.eq(trip.city.id))
+                .where(isTripCityIdNull(),
+                        isNotRegisteredCityWithinOneDay(now),
+                        isViewedCityNotWithinLastWeek(now))
+                .limit(10)
+                .fetch();
+    }
 
     private BooleanExpression equalTripUserName(String userName) {
         return trip.userName.eq(userName);
@@ -89,8 +102,8 @@ public class CityRepositoryImpl implements CityRepositoryCustom {
                 .and(trip.endDate.after(now.toLocalDate()));
     }
 
-    private BooleanExpression isTripCityNull() {
-        return trip.city.isNull();
+    private BooleanExpression isTripCityIdNull() {
+        return trip.city.id.isNull();
     }
 
     private BooleanExpression isRegisteredCityWithinOneDay(LocalDateTime now) {
@@ -103,5 +116,9 @@ public class CityRepositoryImpl implements CityRepositoryCustom {
 
     private BooleanExpression isViewedCityWithinLastWeek(LocalDateTime now) {
         return city.modifiedAt.between(now.minusWeeks(1), now);
+    }
+
+    private BooleanExpression isViewedCityNotWithinLastWeek(LocalDateTime now) {
+        return city.modifiedAt.notBetween(now.minusWeeks(1), now);
     }
 }

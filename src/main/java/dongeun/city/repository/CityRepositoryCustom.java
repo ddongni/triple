@@ -18,4 +18,7 @@ public interface CityRepositoryCustom {
 
     // 최근 일주일 이내에 한 번이상 조회된 도시 조회
     List<City> getViewedCitiesWithinLastWeek(LocalDateTime now);
+
+    // 위의 조건에 해당하지 않는 모든 도시
+    List<City> getOtherRandomCities(LocalDateTime now);
 }

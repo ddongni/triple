@@ -61,7 +61,6 @@ public class CityService {
         return city;
     }
 
-    @Transactional(readOnly = true)
     public List<City> getCities(String userName) {
         LocalDateTime now = LocalDateTime.now();
         List<City> cities = new ArrayList<>();
@@ -100,6 +99,16 @@ public class CityService {
 
         List<City> viewedCitiesAtLeastOnce = cityRepository.getViewedCitiesWithinLastWeek(now);
         checkCityListNull(viewedCitiesAtLeastOnce);
+        for(City city : citiesOnPlanning) {
+            otherCities.add(city);
+            listSize++;
+            if(listSize == 10)
+                return otherCities;
+        }
+
+
+        List<City> otherRandomCities = cityRepository.getOtherRandomCities(now);
+        checkCityListNull(otherRandomCities);
         for(City city : citiesOnPlanning) {
             otherCities.add(city);
             listSize++;
