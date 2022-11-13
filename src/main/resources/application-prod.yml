@@ -1,10 +1,10 @@
 spring:
-  # H2 인메모리 DB 설정
+  # MySQL DB 설정
   datasource:
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-    url: jdbc:h2:~/triple
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: dongeun
+    password: dongeun
+    url: jdbc:mysql://localhost:3306/triple
     # Hikari Connection Pool
     hikari:
       connection-timeout: 30000 # 클라이언트가 pool에 connection을 요청하는데 기다리는 최대시간 (default 30000(30초))
@@ -13,18 +13,11 @@ spring:
       pool-name: HikariCP # pool 이름
       connection-test-query: SELECT 1 # 데이터베이스 연결이 여전히 활성화되어있는지 확인하기 위해 pool에서 connection을 제공하기 전에 실행되는 쿼리
 
-  # H2 console 활성화 및 경로 설정
-  h2:
-    console:
-      path: /h2-console
-      enabled: true
-
   # Hibernate 설정
   jpa:
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
         format_sql: true
         show_sql: true
