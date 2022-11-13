@@ -3,13 +3,12 @@ package dongeun.city.dto;
 import dongeun.city.entity.City;
 import lombok.*;
 
-import javax.validation.constraints.NotNull;
-
 @Data
 @Builder
 public class CityDto {
 
-    @NotNull
+    private Long id;
+
     private String name;
 
     private String country;

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,8 +33,8 @@ public class CityService {
 
     @Transactional
     public City updateCity(CityDto cityDto) {
-        City city = cityRepository.findByName(cityDto.getName())
-                .orElseThrow(() -> new CityException(ErrorCode.NOT_FOUND_DATA, "해당 도시 정보를 찾을 수 없습니다. city name : " + cityDto.getName()));
+        City city = cityRepository.findById(cityDto.getId())
+                .orElseThrow(() -> new CityException(ErrorCode.NOT_FOUND_DATA, "해당 도시 정보를 찾을 수 없습니다. city id : " + cityDto.getId()));
         city.setName(cityDto.getName());
         city.setDescription(cityDto.getDescription());
         city.setCountry(cityDto.getCountry());
@@ -43,80 +42,58 @@ public class CityService {
     }
 
     @Transactional
-    public void deleteCity(String cityName) {
-        City city = cityRepository.findByName(cityName)
-                .orElseThrow(() -> new CityException(ErrorCode.NOT_FOUND_DATA, "해당 도시 정보를 찾을 수 없습니다. city name : " + cityName));
-        List<Trip> trips = tripRepository.findAllByCityId(city.getId());
+    public void deleteCity(Long cityId) {
+        City city = cityRepository.findById(cityId)
+                .orElseThrow(() -> new CityException(ErrorCode.NOT_FOUND_DATA, "해당 도시 정보를 찾을 수 없습니다. city id : " + cityId));
+        List<Trip> trips = tripRepository.findAllByCityId(cityId);
         if(!trips.isEmpty() && trips.size() > 0)
             throw new CityException(ErrorCode.DATABASE_ERROR, "해당 도시로 지정된 여행 건이 있습니다.");
         cityRepository.delete(city);
     }
 
     @Transactional
-    public City getCity(String cityName) {
-        City city = cityRepository.findByName(cityName)
-                .orElseThrow(() -> new CityException(ErrorCode.NOT_FOUND_DATA, "해당 도시 정보를 찾을 수 없습니다. city name : " + cityName));
+    public City getCity(Long cityId) {
+        City city = cityRepository.findById(cityId)
+                .orElseThrow(() -> new CityException(ErrorCode.NOT_FOUND_DATA, "해당 도시 정보를 찾을 수 없습니다. city id : " + cityId));
         city.setLastViewedAt(LocalDateTime.now());
         cityRepository.save(city);
         return city;
     }
 
-    public List<City> getCities(String userName) {
-        LocalDateTime now = LocalDateTime.now();
-        List<City> cities = new ArrayList<>();
-        cities.addAll(getCitiesOnTrip(now, userName));
-        cities.addAll(getOtherCities(now, userName));
-        return cities;
-    }
-
+    @Transactional(readOnly = true)
     public List<City> getCitiesOnTrip(LocalDateTime now, String userName) {
         List<City> citiesOnTrip = cityRepository.getCitiesOnTrip(now, userName);
         checkCityListNull(citiesOnTrip);
         return citiesOnTrip;
     }
 
-    public List<City> getOtherCities(LocalDateTime now, String userName) {
-        List<City> otherCities = new ArrayList<>();
-
-        int listSize = 0;
+    @Transactional(readOnly = true)
+    public List<City> getCitiesOnPlanning(LocalDateTime now, String userName) {
         List<City> citiesOnPlanning = cityRepository.getCitiesOnPlanning(now, userName);
         checkCityListNull(citiesOnPlanning);
-        for(City city : citiesOnPlanning) {
-            otherCities.add(city);
-            listSize++;
-            if(listSize == 10)
-                return otherCities;
-        }
+        return citiesOnPlanning;
+    }
 
+    @Transactional(readOnly = true)
+    public List<City> getRegisteredCitiesWithinOneDay(LocalDateTime now) {
         List<City> registeredCitiesWithinOneDay = cityRepository.getRegisteredCitiesWithinOneDay(now);
         checkCityListNull(registeredCitiesWithinOneDay);
-        for(City city : registeredCitiesWithinOneDay) {
-            otherCities.add(city);
-            listSize++;
-            if(listSize == 10)
-                return otherCities;
-        }
+        return registeredCitiesWithinOneDay;
+    }
 
+    @Transactional(readOnly = true)
+
+    public List<City> getViewedCitiesWithinLastWeek(LocalDateTime now) {
         List<City> viewedCitiesAtLeastOnce = cityRepository.getViewedCitiesWithinLastWeek(now);
         checkCityListNull(viewedCitiesAtLeastOnce);
-        for(City city : citiesOnPlanning) {
-            otherCities.add(city);
-            listSize++;
-            if(listSize == 10)
-                return otherCities;
-        }
+        return viewedCitiesAtLeastOnce;
+    }
 
-
+    @Transactional(readOnly = true)
+    public List<City> getOtherRandomCities(LocalDateTime now) {
         List<City> otherRandomCities = cityRepository.getOtherRandomCities(now);
         checkCityListNull(otherRandomCities);
-        for(City city : citiesOnPlanning) {
-            otherCities.add(city);
-            listSize++;
-            if(listSize == 10)
-                return otherCities;
-        }
-
-        return otherCities;
+        return otherRandomCities;
     }
 
     public void checkCityListNull(List<City> cities) {

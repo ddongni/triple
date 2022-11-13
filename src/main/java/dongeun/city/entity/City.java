@@ -32,6 +32,7 @@ public class City extends TimeStamp {
 
     public CityDto mapCityEntityToCityDto() {
         return CityDto.builder()
+                .id(id)
                 .name(name)
                 .description(description)
                 .country(country)
