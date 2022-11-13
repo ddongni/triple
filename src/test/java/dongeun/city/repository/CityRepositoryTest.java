@@ -151,9 +151,9 @@ public class CityRepositoryTest {
         String userName = "신동은";
 
         City city = City.builder()
-                .name("서울")
-                .country("대한민국")
-                .description("대한민국의 수도 서울 입니다.")
+                .name("워싱턴")
+                .country("미국")
+                .description("미국의 수도 워싱턴 입니다.")
                 .build();
         cityRepository.save(city);
 
@@ -181,9 +181,9 @@ public class CityRepositoryTest {
 
 
         City city = City.builder()
-                .name("서울")
-                .country("대한민국")
-                .description("대한민국의 수도 서울 입니다.")
+                .name("도쿄")
+                .country("일본")
+                .description("일본의 수도 도쿄 입니다.")
                 .build();
         cityRepository.save(city);
 
@@ -191,9 +191,9 @@ public class CityRepositoryTest {
         List<City> registeredCitiesWithinOneDay = cityRepository.getRegisteredCitiesWithinOneDay(now);
 
         // then
-        registeredCitiesWithinOneDay.stream().forEach((registeredCity) -> {
+        for(City registeredCity : registeredCitiesWithinOneDay) {
             assertThat(registeredCity.getCreatedAt()).isBetween(now.minusDays(1), now);
-        });
+        }
     }
 
     @Test
@@ -204,21 +204,21 @@ public class CityRepositoryTest {
 
 
         City city = City.builder()
-                .name("서울")
-                .country("대한민국")
-                .description("대한민국의 수도 서울 입니다.")
+                .name("런던")
+                .country("영국")
+                .description("영국의 수도 런던 입니다.")
                 .build();
         City savedCity = cityRepository.save(city);
-
-        cityRepository.findById(savedCity.getId());
+        savedCity.setLastViewedAt(LocalDateTime.now());
+        cityRepository.save(savedCity);
 
         // when
         List<City> viewedCitiesWithinLastWeek = cityRepository.getViewedCitiesWithinLastWeek(now);
 
         // then
-        viewedCitiesWithinLastWeek.stream().forEach((viewedCity) -> {
+        for(City viewedCity : viewedCitiesWithinLastWeek) {
             assertThat(viewedCity.getLastViewedAt()).isBetween(now.minusWeeks(1), now);
-        });
+        }
     }
 
     @Test
@@ -227,9 +227,9 @@ public class CityRepositoryTest {
         // given
         LocalDateTime now = LocalDateTime.now();
         City city = City.builder()
-                .name("서울")
-                .country("대한민국")
-                .description("대한민국의 수도 서울 입니다.")
+                .name("베이징")
+                .country("중국")
+                .description("중국의 수도 베이징 입니다.")
                 .build();
         City savedCity = cityRepository.save(city);
 
