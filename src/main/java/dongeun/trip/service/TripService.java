@@ -26,8 +26,8 @@ public class TripService {
 
     @Transactional
     public Trip saveTrip(TripDto tripDto) {
-        City city = cityRepository.findByName(tripDto.getCityName())
-                .orElseThrow(() -> new TripException(ErrorCode.NOT_FOUND_DATA, "해당 도시 정보를 찾을 수 없습니다. trip cityName : " + tripDto.getCityName()));
+        City city = cityRepository.findById(tripDto.getCityId())
+                .orElseThrow(() -> new TripException(ErrorCode.NOT_FOUND_DATA, "해당 도시 정보를 찾을 수 없습니다. trip cityId : " + tripDto.getCityId()));
         Trip trip = tripDto.mapTripDtoToTripEntity(city);
         return tripRepository.save(trip);
     }
@@ -38,9 +38,9 @@ public class TripService {
                 .orElseThrow(() -> new TripException(ErrorCode.NOT_FOUND_DATA, "해당 여행 정보를 찾을 수 없습니다. trip id : " + tripDto.getId()));
 
         // 여행 정보에서 도시 정보 수정 시
-        if(!tripDto.getCityName().equals(trip.getCity())) {
-            City city = cityRepository.findByName(tripDto.getCityName())
-                    .orElseThrow(() -> new TripException(ErrorCode.NOT_FOUND_DATA, "해당 도시 정보를 찾을 수 없습니다. trip cityName : " + tripDto.getCityName()));
+        if(!tripDto.getCityId().equals(trip.getCity().getId())) {
+            City city = cityRepository.findById(tripDto.getCityId())
+                    .orElseThrow(() -> new TripException(ErrorCode.NOT_FOUND_DATA, "해당 도시 정보를 찾을 수 없습니다. trip cityId : " + tripDto.getCityId()));
             trip.setCity(city);
         }
         trip.setDescription(tripDto.getDescription());

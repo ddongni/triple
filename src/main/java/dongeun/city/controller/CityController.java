@@ -95,8 +95,8 @@ public class CityController {
 
     @PostMapping("/cities")
     public CityResponseDto saveCity(@RequestParam String name,
-                                            @RequestParam String country,
-                                            @RequestParam String description) {
+                                    @RequestParam String country,
+                                    @RequestParam String description) {
         CityDto cityDto = CityDto.builder()
                 .name(name)
                 .country(country)
@@ -113,9 +113,9 @@ public class CityController {
 
     @PutMapping("/cities")
     public CityResponseDto updateCity(@RequestParam Long cityId,
-                                              @RequestParam String name,
-                                              @RequestParam String country,
-                                              @RequestParam String description) {
+                                      @RequestParam String name,
+                                      @RequestParam String country,
+                                      @RequestParam String description) {
         CityDto cityDto = CityDto.builder()
                 .id(cityId)
                 .name(name)

@@ -1,10 +1,12 @@
 package dongeun.city.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import dongeun.city.entity.City;
 import lombok.*;
 
 @Data
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CityDto {
 
     private Long id;

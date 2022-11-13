@@ -1,23 +1,23 @@
 package dongeun.trip.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import dongeun.city.entity.City;
 import dongeun.trip.entity.Trip;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TripDto {
 
     private Long id;
 
     private String description;
 
-    @NotNull
-    private String cityName;
+    private Long cityId;
 
     private LocalDate startDate;
 

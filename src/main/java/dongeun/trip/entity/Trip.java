@@ -43,7 +43,7 @@ public class Trip extends TimeStamp {
         return TripDto.builder()
                 .id(id)
                 .description(description)
-                .cityName(city.getName())
+                .cityId(city.getId())
                 .startDate(startDate)
                 .endDate(endDate)
                 .transportation(transportation)
