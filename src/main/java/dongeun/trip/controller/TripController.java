@@ -4,6 +4,7 @@ import dongeun.trip.dto.TripDto;
 import dongeun.trip.dto.TripResponseDto;
 import dongeun.trip.entity.Trip;
 import dongeun.trip.service.TripService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/v1")
 public class TripController {
 
     private TripService tripService;
@@ -20,6 +22,10 @@ public class TripController {
         this.tripService = tripService;
     }
 
+    @Operation(
+            summary = "단일 여행 조회",
+            method = "GET"
+    )
     @GetMapping("/trips/{tripId}")
     public TripResponseDto getTrip(@PathVariable Long tripId) {
         Trip trip = tripService.getTrip(tripId);
@@ -29,6 +35,10 @@ public class TripController {
                 .build();
     }
 
+    @Operation(
+            summary = "모든 여행 조회",
+            method = "GET"
+    )
     @GetMapping("/trips")
     public TripResponseDto getTrips() {
         List<Trip> trips = tripService.getTrips();
@@ -43,6 +53,10 @@ public class TripController {
                 .build();
     }
 
+    @Operation(
+            summary = "여행 등록",
+            method = "POST"
+    )
     @PostMapping("/trips")
     public TripResponseDto saveTrip(@RequestParam String userName,
                                     @RequestParam Long cityId,
@@ -68,6 +82,10 @@ public class TripController {
                 .build();
     }
 
+    @Operation(
+            summary = "여행 수정",
+            method = "PUT"
+    )
     @PutMapping("/trips")
     public TripResponseDto updateTrip(@RequestParam Long tripId,
                                               @RequestParam String userName,
@@ -94,6 +112,10 @@ public class TripController {
                 .build();
     }
 
+    @Operation(
+            summary = "여행 삭제",
+            method = "DELETE"
+    )
     @DeleteMapping("/trips")
     public TripResponseDto deleteTrip(@RequestParam Long tripId) {
         tripService.deleteTrip(tripId);

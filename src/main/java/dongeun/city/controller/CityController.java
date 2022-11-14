@@ -4,6 +4,7 @@ import dongeun.city.dto.CityDto;
 import dongeun.city.dto.CityResponseDto;
 import dongeun.city.entity.City;
 import dongeun.city.service.CityService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/v1")
 public class CityController {
 
     private CityService cityService;
@@ -19,6 +21,10 @@ public class CityController {
         this.cityService = cityService;
     }
 
+    @Operation(
+            summary = "단일 도시 조회",
+            method = "GET"
+    )
     @GetMapping("/cities/{cityId}")
     public CityResponseDto getCity(@PathVariable Long cityId) {
         City city = cityService.getCity(cityId);
@@ -28,6 +34,10 @@ public class CityController {
                 .build();
     }
 
+    @Operation(
+            summary = "사용자별 도시 목록 조회",
+            method = "GET"
+    )
     @GetMapping("/cities")
     public List<CityResponseDto> getCities(@RequestParam String userName) {
         LocalDateTime now = LocalDateTime.now();
@@ -93,6 +103,10 @@ public class CityController {
                 .build());
     }
 
+    @Operation(
+            summary = "도시 등록",
+            method = "POST"
+    )
     @PostMapping("/cities")
     public CityResponseDto saveCity(@RequestParam String name,
                                     @RequestParam String country,
@@ -111,6 +125,10 @@ public class CityController {
                 .build();
     }
 
+    @Operation(
+            summary = "도시 수정",
+            method = "PUT"
+    )
     @PutMapping("/cities")
     public CityResponseDto updateCity(@RequestParam Long cityId,
                                       @RequestParam String name,
@@ -131,6 +149,10 @@ public class CityController {
                 .build();
     }
 
+    @Operation(
+            summary = "도시 삭제",
+            method = "DELETE"
+    )
     @DeleteMapping("/cities")
     public CityResponseDto deleteCity(@RequestParam Long cityId) {
         cityService.deleteCity(cityId);
