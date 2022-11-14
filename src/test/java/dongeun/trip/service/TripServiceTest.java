@@ -5,6 +5,7 @@ import dongeun.city.repository.CityRepository;
 import dongeun.trip.dto.TripDto;
 import dongeun.trip.entity.Trip;
 import dongeun.trip.repository.TripRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,17 +31,22 @@ public class TripServiceTest {
     @Autowired
     CityRepository cityRepository;
 
-    @Test
-    @DisplayName("여행 등록 테스트")
-    public void saveTrip() {
-        // given
+    private City savedCity;
+
+    @BeforeEach
+    public void saveCity() {
         City city = City.builder()
                 .name("서울")
                 .country("대한민국")
                 .description("대한민국의 수도 서울 입니다.")
                 .build();
-        City savedCity = cityRepository.save(city);
+        savedCity = cityRepository.save(city);
+    }
 
+    @Test
+    @DisplayName("여행 등록 테스트")
+    public void saveTrip() {
+        // given
         TripDto trip = TripDto.builder()
                 .userName("신동은")
                 .cityId(savedCity.getId())
@@ -54,7 +60,7 @@ public class TripServiceTest {
         // then
         assertThat(savedTrip.getId()).isNotNull();
         assertThat(savedTrip.getUserName()).isEqualTo(trip.getUserName());
-        assertThat(savedTrip.getCity().getId()).isEqualTo(savedCity.getId());
+        assertThat(savedTrip.getCity().getId()).isEqualTo(trip.getCityId());
         assertThat(savedTrip.getStartDate()).isEqualTo(trip.getStartDate());
         assertThat(savedTrip.getEndDate()).isEqualTo(trip.getEndDate());
     }
@@ -63,16 +69,9 @@ public class TripServiceTest {
     @DisplayName("여행 수정 테스트")
     public void updateTrip() {
         // given
-        City city = City.builder()
-                .name("서울")
-                .country("대한민국")
-                .description("대한민국의 수도 서울 입니다.")
-                .build();
-        cityRepository.save(city);
-
         Trip trip = Trip.builder()
                 .userName("신동은")
-                .city(city)
+                .city(savedCity)
                 .startDate(LocalDate.parse("2022-11-01"))
                 .endDate(LocalDate.parse("2022-12-31"))
                 .build();
@@ -94,16 +93,9 @@ public class TripServiceTest {
     @DisplayName("여행 삭제 테스트")
     public void deleteTrip() {
         // given
-        City city = City.builder()
-                .name("서울")
-                .country("대한민국")
-                .description("대한민국의 수도 서울 입니다.")
-                .build();
-        cityRepository.save(city);
-
         Trip trip = Trip.builder()
                 .userName("신동은")
-                .city(city)
+                .city(savedCity)
                 .startDate(LocalDate.parse("2022-11-01"))
                 .endDate(LocalDate.parse("2022-12-31"))
                 .build();
@@ -122,16 +114,9 @@ public class TripServiceTest {
     @DisplayName("단일 여행 조회 테스트")
     public void getTrip() {
         // given
-        City city = City.builder()
-                .name("서울")
-                .country("대한민국")
-                .description("대한민국의 수도 서울 입니다.")
-                .build();
-        cityRepository.save(city);
-
         Trip trip = Trip.builder()
                 .userName("신동은")
-                .city(city)
+                .city(savedCity)
                 .startDate(LocalDate.parse("2022-11-01"))
                 .endDate(LocalDate.parse("2022-12-31"))
                 .build();
@@ -154,16 +139,9 @@ public class TripServiceTest {
     @DisplayName("모든 여행 조회 테스트")
     public void getTrips() {
         // given
-        City city = City.builder()
-                .name("서울")
-                .country("대한민국")
-                .description("대한민국의 수도 서울 입니다.")
-                .build();
-        cityRepository.save(city);
-
         Trip trip = Trip.builder()
                 .userName("신동은")
-                .city(city)
+                .city(savedCity)
                 .startDate(LocalDate.parse("2022-11-01"))
                 .endDate(LocalDate.parse("2022-12-31"))
                 .build();

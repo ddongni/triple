@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 public class CityControllerTest {
 
     @Autowired
@@ -64,8 +66,8 @@ public class CityControllerTest {
         String country = "대한민국";
 
         City city = City.builder()
-                .name("서울")
-                .country("대한민국")
+                .name(name)
+                .country(country)
                 .description("대한민국의 수도 서울 입니다.")
                 .build();
 
@@ -130,7 +132,7 @@ public class CityControllerTest {
         // when
 
         // then
-        mockMvc.perform(get("/cities/"+savedCity.getId()))
+        mockMvc.perform(get("/cities/" + savedCity.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.city.id", is(savedCity.getId()), Long.class))

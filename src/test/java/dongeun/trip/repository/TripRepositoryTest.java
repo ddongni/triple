@@ -3,6 +3,7 @@ package dongeun.trip.repository;
 import dongeun.city.entity.City;
 import dongeun.city.repository.CityRepository;
 import dongeun.trip.entity.Trip;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,20 +24,25 @@ public class TripRepositoryTest {
     @Autowired
     TripRepository tripRepository;
 
-    @Test
-    @DisplayName("여행 등록 테스트")
-    public void saveTrip() {
-        // given
+    private City savedCity;
+
+    @BeforeEach
+    public void saveCity() {
         City city = City.builder()
                 .name("서울")
                 .country("대한민국")
                 .description("대한민국의 수도 서울 입니다.")
                 .build();
-        City savedCity = cityRepository.save(city);
+        savedCity = cityRepository.save(city);
+    }
 
+    @Test
+    @DisplayName("여행 등록 테스트")
+    public void saveTrip() {
+        // given
         Trip trip = Trip.builder()
                 .userName("신동은")
-                .city(city)
+                .city(savedCity)
                 .startDate(LocalDate.parse("2022-11-01"))
                 .endDate(LocalDate.parse("2022-12-31"))
                 .build();
@@ -47,7 +53,7 @@ public class TripRepositoryTest {
         // then
         assertThat(savedTrip.getId()).isNotNull();
         assertThat(savedTrip.getUserName()).isEqualTo(trip.getUserName());
-        assertThat(savedTrip.getCity().getId()).isEqualTo(savedCity.getId());
+        assertThat(savedTrip.getCity().getId()).isEqualTo(trip.getCity().getId());
         assertThat(savedTrip.getStartDate()).isEqualTo(trip.getStartDate());
         assertThat(savedTrip.getEndDate()).isEqualTo(trip.getEndDate());
     }
@@ -56,16 +62,9 @@ public class TripRepositoryTest {
     @DisplayName("여행 수정 테스트")
     public void updateTrip() {
         // given
-        City city = City.builder()
-                .name("서울")
-                .country("대한민국")
-                .description("대한민국의 수도 서울 입니다.")
-                .build();
-        City savedCity = cityRepository.save(city);
-
         Trip trip = Trip.builder()
                 .userName("신동은")
-                .city(city)
+                .city(savedCity)
                 .startDate(LocalDate.parse("2022-11-01"))
                 .endDate(LocalDate.parse("2022-12-31"))
                 .build();
@@ -87,16 +86,9 @@ public class TripRepositoryTest {
     @DisplayName("여행 삭제 테스트")
     public void deleteTrip() {
         // given
-        City city = City.builder()
-                .name("서울")
-                .country("대한민국")
-                .description("대한민국의 수도 서울 입니다.")
-                .build();
-        City savedCity = cityRepository.save(city);
-
         Trip trip = Trip.builder()
                 .userName("신동은")
-                .city(city)
+                .city(savedCity)
                 .startDate(LocalDate.parse("2022-11-01"))
                 .endDate(LocalDate.parse("2022-12-31"))
                 .build();
@@ -115,16 +107,9 @@ public class TripRepositoryTest {
     @DisplayName("단일 여행 조회 테스트")
     public void getTrip() {
         // given
-        City city = City.builder()
-                .name("서울")
-                .country("대한민국")
-                .description("대한민국의 수도 서울 입니다.")
-                .build();
-        City savedCity = cityRepository.save(city);
-
         Trip trip = Trip.builder()
                 .userName("신동은")
-                .city(city)
+                .city(savedCity)
                 .startDate(LocalDate.parse("2022-11-01"))
                 .endDate(LocalDate.parse("2022-12-31"))
                 .build();
@@ -147,16 +132,9 @@ public class TripRepositoryTest {
     @DisplayName("모든 여행 조회 테스트")
     public void getTrips() {
         // given
-        City city = City.builder()
-                .name("서울")
-                .country("대한민국")
-                .description("대한민국의 수도 서울 입니다.")
-                .build();
-        cityRepository.save(city);
-
         Trip trip = Trip.builder()
                 .userName("신동은")
-                .city(city)
+                .city(savedCity)
                 .startDate(LocalDate.parse("2022-11-01"))
                 .endDate(LocalDate.parse("2022-12-31"))
                 .build();
