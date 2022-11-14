@@ -85,8 +85,8 @@ public class CityRepositoryTest {
         cityRepository.delete(savedCity);
 
         // then
-        Optional<City> getCity = cityRepository.findById(savedCityId);
-        assertThat(getCity).isEmpty();
+        Optional<City> foundCity = cityRepository.findById(savedCityId);
+        assertThat(foundCity).isEmpty();
     }
 
     @Test
@@ -103,14 +103,14 @@ public class CityRepositoryTest {
 
         // when
         Long savedCityId = savedCity.getId();
-        Optional<City> getCity = cityRepository.findById(savedCityId);
+        Optional<City> foundCity = cityRepository.findById(savedCityId);
 
         // then
-        assertThat(getCity).isNotEmpty();
-        assertThat(getCity.get().getId()).isEqualTo(savedCityId);
-        assertThat(getCity.get().getName()).isEqualTo(city.getName());
-        assertThat(getCity.get().getCountry()).isEqualTo(city.getCountry());
-        assertThat(getCity.get().getDescription()).isEqualTo(city.getDescription());
+        assertThat(foundCity).isNotEmpty();
+        assertThat(foundCity.get().getId()).isEqualTo(savedCityId);
+        assertThat(foundCity.get().getName()).isEqualTo(city.getName());
+        assertThat(foundCity.get().getCountry()).isEqualTo(city.getCountry());
+        assertThat(foundCity.get().getDescription()).isEqualTo(city.getDescription());
     }
 
     @Test
@@ -131,7 +131,7 @@ public class CityRepositoryTest {
                 .userName(userName)
                 .city(city)
                 .startDate(LocalDate.parse("2022-11-01"))
-                .endDate(LocalDate.parse("2022-11-15"))
+                .endDate(LocalDate.parse("2022-11-15트"))
                 .build();
         tripRepository.save(trip);
 
