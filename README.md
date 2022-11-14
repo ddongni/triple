@@ -1,4 +1,4 @@
-# 여행지(도시) 관리 API 서버 구현
+# 여행지(도시) 관리 API 서버
 
 ## 서버 실행 전 환경 설정하기
 
@@ -112,4 +112,9 @@ Production 애플리케이션에 설정한 MySQL DB 정보는 다음과 같다.
      ```
      mysql> select * from triple;
      ```
+
+### 서버 API 명세서
+애플리케이션 실행 후, http://localhost:8080/swagger-ui.html 에 접속하여 서버 API 명세서를 확인하고 API를 요청해볼 수 있다.
+<img width="1501" alt="image" src="https://user-images.githubusercontent.com/68309632/201682636-f3fda940-8ab0-4f82-b963-333e376883b9.png">
+<img width="1490" alt="image" src="https://user-images.githubusercontent.com/68309632/201682724-5de18bc3-c6e4-44bd-82b6-760926e29adc.png">
 
